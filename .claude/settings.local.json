@@ -1,7 +1,15 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "mcp__nuxt-remote__get-documentation-page",
+      "mcp__nuxt-remote__list-documentation-pages",
+      "mcp__plugin_context7_context7__resolve-library-id",
+      "mcp__plugin_context7_context7__query-docs",
+      "WebSearch",
+      "Bash(npx drizzle-kit push)",
+      "Bash(npm run seed:*)",
+      "Bash(npm run dev:*)"
     ]
   }
 }
