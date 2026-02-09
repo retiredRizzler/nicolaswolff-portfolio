@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="portfolio-page">
     <LoaderLanding
       title="Nicolas Wolff"
       subtitle="Visual Storyteller"
@@ -167,6 +167,7 @@ useHead({
 </script>
 
 <style scoped>
+
 .container {
   max-width: 1400px;
   margin: 0 auto;

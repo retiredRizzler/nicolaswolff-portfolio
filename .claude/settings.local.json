@@ -9,7 +9,10 @@
       "WebSearch",
       "Bash(npx drizzle-kit push)",
       "Bash(npm run seed:*)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "Bash(timeout /t 10)",
+      "mcp__nuxt-ui-remote__list-components",
+      "mcp__nuxt-ui-remote__get-component"
     ]
   }
 }

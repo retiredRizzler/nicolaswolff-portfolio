@@ -1,6 +1,63 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
+/* ============================================
+   NUXT UI THEME CONFIGURATION
+   ============================================ */
+
+@theme {
+  /* Custom Font - PP Neue Montreal for landing page */
+  --font-portfolio: 'PP Neue Montreal', system-ui, sans-serif;
+
+  /* Custom Colors - Portfolio brand colors */
+  --color-portfolio-bg: #f4f4f4;
+  --color-portfolio-text: #201d1d;
+
+  /* You can add more custom design tokens here if needed */
+}
+
+/* ============================================
+   NUXT UI CUSTOM VARIABLES
+   Monochrome black/white/zinc aesthetic
+   White components on subtle gray backgrounds
+   ============================================ */
+
+:root {
+  /* Light mode - White components on gray page */
+  --ui-bg: white;                  /* Component backgrounds (cards, forms) - PURE WHITE */
+  --ui-bg-muted: #f4f4f5;          /* Page background - subtle gray */
+  --ui-bg-elevated: white;         /* Elevated components - PURE WHITE */
+  --ui-bg-accented: #fafafa;       /* Accented areas */
+
+  --ui-text: #18181b;              /* zinc-900 - main text */
+  --ui-text-highlighted: #09090b;  /* zinc-950 - headings */
+  --ui-text-muted: #71717a;        /* zinc-500 - secondary text */
+  --ui-text-dimmed: #a1a1aa;       /* zinc-400 - tertiary text */
+
+  --ui-border: #e4e4e7;            /* zinc-200 - borders */
+  --ui-border-muted: #f4f4f5;      /* zinc-100 - subtle borders */
+}
+
+.dark {
+  /* Dark mode - Elegant dark components */
+  --ui-bg: #27272a;                /* Component backgrounds (cards, forms) - zinc-800 */
+  --ui-bg-muted: #18181b;          /* Page background - zinc-900 */
+  --ui-bg-elevated: #3f3f46;       /* Elevated components - zinc-700 */
+  --ui-bg-accented: #3f3f46;       /* Accented areas */
+
+  --ui-text: #fafafa;              /* zinc-50 - main text */
+  --ui-text-highlighted: white;    /* Headings */
+  --ui-text-muted: #a1a1aa;        /* zinc-400 - secondary text */
+  --ui-text-dimmed: #71717a;       /* zinc-500 - tertiary text */
+
+  --ui-border: #3f3f46;            /* zinc-700 - borders */
+  --ui-border-muted: #27272a;      /* zinc-800 - subtle borders */
+}
+
+/* ============================================
+   FONT FACE DECLARATIONS
+   ============================================ */
+
 @font-face {
   font-family: 'PP Neue Montreal';
   src: url('https://cdn.prod.website-files.com/6819ed8312518f61b84824df/6819ed8312518f61b84825ba_PPNeueMontreal-Medium.woff2') format('woff2');
@@ -17,27 +74,36 @@
   font-display: swap;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* ============================================
+   GLOBAL STYLES
+   ============================================ */
 
 html {
   scroll-behavior: smooth;
 }
 
-body {
-  font-family: 'PP Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background-color: #f4f4f4;
-  color: #201d1d;
+/* Let Nuxt UI handle body styles by default (for admin/client pages) */
+/* Landing page styles will be scoped to .portfolio-page class */
+
+/* ============================================
+   PORTFOLIO LANDING PAGE STYLES
+   Scoped to pages that use .portfolio-page class
+   ============================================ */
+
+.portfolio-page {
+  font-family: var(--font-portfolio);
+  background-color: var(--color-portfolio-bg);
+  color: var(--color-portfolio-text);
   font-weight: 300;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-/* Page Transitions */
+/* ============================================
+   PAGE TRANSITIONS
+   ============================================ */
+
 .page-enter-active,
 .page-leave-active {
   transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);

@@ -1,9 +1,12 @@
 <template>
-  <div>
-    <NuxtRouteAnnouncer />
-    <NuxtPage :transition="{
-      name: 'page',
-      mode: 'out-in'
-    }" />
-  </div>
+  <UApp>
+      <NuxtLayout>
+        <NuxtPage
+          :transition="{
+            name: 'page',
+            mode: 'out-in',
+          }"
+        />
+      </NuxtLayout>
+  </UApp>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="project" class="project-detail">
+  <div v-if="project" class="portfolio-page project-detail">
     <!-- Hero Section -->
     <section class="project-hero">
       <div class="hero-image">
@@ -155,6 +155,7 @@ useHead({
 </script>
 
 <style scoped>
+
 /* Hero Section */
 .project-hero {
   position: relative;
