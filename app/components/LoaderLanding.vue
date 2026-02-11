@@ -113,6 +113,9 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { gsap } from 'gsap'
 
+// Storage key for tracking if loader has played
+const LOADER_PLAYED_KEY = 'willem-loader-played'
+
 // Props pour rendre le composant réutilisable
 const props = defineProps({
   title: {
@@ -155,6 +158,10 @@ const props = defineProps({
   autoPlay: {
     type: Boolean,
     default: true
+  },
+  playOnce: {
+    type: Boolean,
+    default: true
   }
 })
 
@@ -176,6 +183,87 @@ const getSocialIcon = (name) => {
     'LinkedIn': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>'
   }
   return icons[name] || '◉'
+}
+
+const startWidth = ref('auto')
+const endWidth = ref('auto')
+
+const calculateWidths = () => {
+  const startEl = document.querySelector('.willem__h1-start')
+  const endEl = document.querySelector('.willem__h1-end')
+
+  if (startEl && endEl) {
+    const fontSize = parseFloat(getComputedStyle(startEl).fontSize)
+    startWidth.value = `${startEl.scrollWidth / fontSize}em`
+    endWidth.value = `${endEl.scrollWidth / fontSize}em`
+  }
+}
+
+// Skip to final state without animation
+const skipToEnd = () => {
+  if (!container.value) return
+
+  // Remove loading and hidden classes
+  container.value.classList.remove('is--loading', 'is--hidden')
+
+  // Hide only the "Made By" letters, not the whole loader
+  const loadingLetters = container.value.querySelectorAll('.willem-loader .willem__letter')
+  loadingLetters.forEach(el => {
+    el.style.opacity = '0'
+  })
+
+  // Set the box to final expanded state
+  const box = container.value.querySelector('.willem-loader__box')
+  if (box) {
+    box.style.width = '110vw'
+  }
+
+  // Set the growing image to final expanded state
+  const growingImage = container.value.querySelector('.willem__growing-image')
+  if (growingImage) {
+    growingImage.style.width = '100vw'
+    growingImage.style.height = '100dvh'
+  }
+
+  // Hide extra cover images (glitch effect images)
+  const coverImageExtra = container.value.querySelectorAll('.willem__cover-image-extra')
+  coverImageExtra.forEach(el => {
+    el.style.opacity = '0'
+  })
+
+  // Show all final content elements
+  const headerLetter = container.value.querySelectorAll('.willem__letter-white--hidden')
+  const subtitle = container.value.querySelectorAll('.willem__subtitle--hidden')
+  const footerLinks = container.value.querySelectorAll('.willem-footer__link--hidden')
+  const scrollIndicator = container.value.querySelector('.willem-scroll-indicator--hidden')
+
+  // Remove hidden classes and set to visible state
+  headerLetter.forEach(el => {
+    el.classList.remove('willem__letter-white--hidden')
+    el.style.opacity = '1'
+    el.style.transform = 'translateY(0)'
+  })
+
+  subtitle.forEach(el => {
+    el.classList.remove('willem__subtitle--hidden')
+    el.style.opacity = '1'
+    el.style.transform = 'translateY(0)'
+  })
+
+  footerLinks.forEach(el => {
+    el.classList.remove('willem-footer__link--hidden')
+    el.style.opacity = '1'
+    el.style.transform = 'translateY(0)'
+  })
+
+  if (scrollIndicator) {
+    scrollIndicator.classList.remove('willem-scroll-indicator--hidden')
+    scrollIndicator.style.opacity = '1'
+    scrollIndicator.style.transform = 'translateY(0)'
+  }
+
+  // Emit complete event immediately
+  emit('complete')
 }
 
 // Fonction d'animation (adaptation de l'original)
@@ -204,6 +292,10 @@ const initAnimation = () => {
       container.value?.classList.remove('is--hidden')
     },
     onComplete: () => {
+      // Mark animation as played in session storage
+      if (props.playOnce) {
+        sessionStorage.setItem(LOADER_PLAYED_KEY, 'true')
+      }
       // Émit un événement quand l'animation est terminée
       emit('complete')
     }
@@ -282,8 +374,10 @@ const initAnimation = () => {
     headerLetter,
     {
       yPercent: 100,
-      duration: 1.45,
+      opacity: 0,
+      duration: 1.8,
       ease: 'expo.out',
+      stagger: 0.015,
       onStart: () => {
         // Rend les lettres visibles quand l'animation commence
         headerLetter.forEach(el => el.classList.remove('willem__letter-white--hidden'))
@@ -358,9 +452,18 @@ const initAnimation = () => {
 
 // Lifecycle hooks
 onMounted(() => {
-  if (props.autoPlay) {
+  // Check if animation has already played this session
+  const hasPlayed = sessionStorage.getItem(LOADER_PLAYED_KEY)
+
+  if (hasPlayed && props.playOnce) {
+    // Skip animation, show final state immediately
+    skipToEnd()
+  } else if (props.autoPlay) {
+    // Play animation normally
     initAnimation()
   }
+
+  setTimeout(calculateWidths, 100)
 })
 
 onBeforeUnmount(() => {
@@ -370,7 +473,8 @@ onBeforeUnmount(() => {
 
 // Expose la fonction pour pouvoir la déclencher manuellement
 defineExpose({
-  play: initAnimation
+  play: initAnimation,
+  skipToEnd: skipToEnd
 })
 </script>
 
@@ -431,13 +535,15 @@ main:has(.willem-header.is--loading) {
 .willem__h1-start {
   justify-content: flex-end;
   display: flex;
-  width: 1.5256em; 
+  font-size: 0.5em;
+  width: 1.5256em;  
 }
 
 .willem__h1-end {
   justify-content: flex-start;
   display: flex;
-  width: 1.525em;
+  font-size: 0.5em;
+  width: 1.5256em;
 }
 
 .willem__letter {
@@ -539,6 +645,7 @@ main:has(.willem-header.is--loading) {
   z-index: 10;
   width: 100%;
   max-width: 90%;
+  padding: 0 2rem;
 }
 
 .willem__title-wrapper {
@@ -546,6 +653,14 @@ main:has(.willem-header.is--loading) {
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
+}
+
+.willem__title-wrapper .willem__h1 {
+  font-size: clamp(3rem, 8vw, 12rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+  text-align: center;
 }
 
 .willem-header__bottom {
@@ -568,7 +683,6 @@ main:has(.willem-header.is--loading) {
   gap: 0.5em;
   position: relative;
   overflow: hidden;
-  padding: 2rem;
 }
 
 .willem-footer__social {
@@ -606,8 +720,15 @@ main:has(.willem-header.is--loading) {
 }
 
 .willem__letter-white {
-  display: block;
+  display: inline-block;
   position: relative;
+  color: #f4f4f4;
+  text-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.4),
+    0 4px 24px rgba(0, 0, 0, 0.3),
+    0 8px 48px rgba(0, 0, 0, 0.2);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .willem__letter-white--hidden {
@@ -635,9 +756,6 @@ main:has(.willem-header.is--loading) {
 
 /* Scroll Indicator */
 .willem-scroll-indicator {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -695,6 +813,13 @@ main:has(.willem-header.is--loading) {
   .willem-header__center {
     width: 95%;
     max-width: 95%;
+    padding: 0 1rem;
+  }
+
+  .willem__title-wrapper .willem__h1 {
+    font-size: clamp(2.5rem, 10vw, 5rem);
+    letter-spacing: -0.03em;
+    line-height: 0.9;
   }
 
   .willem__title-wrapper {
@@ -733,6 +858,15 @@ main:has(.willem-header.is--loading) {
 }
 
 @media screen and (max-width: 480px) {
+  .willem__title-wrapper .willem__h1 {
+    font-size: clamp(2rem, 12vw, 3.5rem);
+    letter-spacing: -0.04em;
+  }
+
+  .willem-header__center {
+    padding: 0 0.5rem;
+  }
+
   .willem-footer__link {
     font-size: 0.75em;
   }

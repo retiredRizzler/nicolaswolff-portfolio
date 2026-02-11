@@ -2,7 +2,7 @@
   <div class="cinematic-scroll">
     <!-- Section Title -->
     <div class="section-intro">
-      <h2 class="section-title">My Work</h2>
+      <h2 class="section-title">Featured work</h2>
       <p class="section-subtitle">Click to explore each story</p>
     </div>
 

@@ -10,74 +10,81 @@
       @complete="onLoadingComplete"
     />
 
-    <!-- My Work - Cinematic Scroll -->
-    <CinematicScroll />
+    <!-- Content sections - only shown after loading animation completes -->
+    <template v-if="isLoadingComplete">
 
-    <!-- Text Image Reveal - Storytelling Narrative -->
-    <TextImageReveal
-      :lines="narrativeLines"
-      :show-outro="false"
-      :image-width="250"
-      :image-height="120"
-      font-size="7.5rem"
-      background-color="#f4f4f4"
-      text-color="#201d1d"
-      :smooth-scroll="true"
-    />
+      <!-- Text Image Reveal - Storytelling Narrative -->
+      <TextImageReveal
+        :lines="narrativeLines"
+        :show-outro="false"
+        :image-width="250"
+        :image-height="120"
+        font-size="7.5rem"
+        background-color="#f4f4f4"
+        text-color="#201d1d"
+        :smooth-scroll="true"
+      />
+      
+      <!-- My Work - Cinematic Scroll -->
+      <CinematicScroll />
 
-    <!-- About Section -->
-    <section class="about-section">
-      <div class="container">
-        <div class="about-grid">
-          <div class="about-content">
-            <h2 class="about-title">About me</h2>
-            <p class="about-text">
-              Professional photographer specializing in capturing the essence of moments
-              through reportage, corporate, portrait, and product photography. Each project
-              is approached with a storytelling mindset, creating visual narratives that
-              resonate and inspire.
-            </p>
-            <p class="about-text">
-              Based in Belgium, working worldwide to bring your vision to life through
-              the lens of authentic, powerful imagery.
-            </p>
-          </div>
-          <div class="about-stats">
-            <div class="stat-item">
-              <span class="stat-number">15+</span>
-              <span class="stat-label">Projects Completed</span>
+      <!-- About Section -->
+      <section class="about-section">
+        <div class="container">
+          <div class="about-grid">
+            <div class="about-content">
+              <h2 class="about-title">About me</h2>
+              <p class="about-text">
+                Professional photographer specializing in capturing the essence of moments
+                through reportage, corporate, portrait, and product photography. Each project
+                is approached with a storytelling mindset, creating visual narratives that
+                resonate and inspire.
+              </p>
+              <p class="about-text">
+                Based in Belgium, working worldwide to bring your vision to life through
+                the lens of authentic, powerful imagery.
+              </p>
             </div>
-            <div class="stat-item">
-              <span class="stat-number">10+</span>
-              <span class="stat-label">Happy Clients</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-number">3+</span>
-              <span class="stat-label">Years Experience</span>
+            <div class="about-stats">
+              <div class="stat-item">
+                <span class="stat-number">15+</span>
+                <span class="stat-label">Projects Completed</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-number">10+</span>
+                <span class="stat-label">Happy Clients</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-number">3+</span>
+                <span class="stat-label">Years Experience</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- CTA Section -->
-    <section class="cta-section">
-      <div class="container">
-        <div class="cta-content">
-          <h2 class="cta-title">Let's Create Together</h2>
-          <p class="cta-text">
-            Ready to bring your vision to life? Get in touch to discuss your next project.
-          </p>
-          <a href="#contact" class="cta-button">Get In Touch</a>
+      <!-- CTA Section -->
+      <section class="cta-section">
+        <div class="container">
+          <div class="cta-content">
+            <h2 class="cta-title">Let's Create Together</h2>
+            <p class="cta-text">
+              Ready to bring your vision to life? Get in touch to discuss your next project.
+            </p>
+            <a href="#contact" class="cta-button">Get In Touch</a>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </template>
   </div>
 </template>
 
 <script setup lang="ts">
 import CinematicScroll from '~/components/sections/CinematicScroll.vue'
 import TextImageReveal from '~/components/TextImageReveal.vue'
+
+// Track loading animation completion
+const isLoadingComplete = ref(false)
 
 // Narrative lines for TextImageReveal component
 const narrativeLines = [
@@ -152,6 +159,7 @@ const mainImage = '/images/nico-background-hero.jpeg'
 // Handle animation completion
 const onLoadingComplete = () => {
   console.log('Hero animation completed')
+  isLoadingComplete.value = true
 }
 
 // SEO meta tags
