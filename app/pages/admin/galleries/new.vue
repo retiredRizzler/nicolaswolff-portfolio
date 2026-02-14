@@ -136,7 +136,8 @@ const handleSubmit = async () => {
     }
 
     if (formState.expiresAt) {
-      data.expiresAt = formState.expiresAt
+      data.expiresAt = new Date(formState.expiresAt).toISOString()
+      console.log("formattedDate: ",data.expiresAt)
     }
 
     if (formState.maxViews && formState.maxViews > 0) {
@@ -144,6 +145,7 @@ const handleSubmit = async () => {
     }
 
     const gallery = await createGallery(data)
+    console.log('New Gallery successfully created')
     await navigateTo(`/admin/galleries/${gallery.id}`)
   } catch (error) {
     // Error already handled by useAdminApi

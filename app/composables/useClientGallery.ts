@@ -12,7 +12,7 @@ export const useClientGallery = () => {
       toast.add({
         title: 'Success',
         description: 'Gallery unlocked',
-        color: 'green'
+        color: 'success'
       })
       return true
     } catch (error: any) {
@@ -20,7 +20,7 @@ export const useClientGallery = () => {
       toast.add({
         title: 'Error',
         description: message,
-        color: 'red'
+        color: 'error'
       })
       return false
     }
@@ -37,7 +37,7 @@ export const useClientGallery = () => {
       toast.add({
         title: 'Error',
         description: message,
-        color: 'red'
+        color: 'error'
       })
       throw error
     }
@@ -54,7 +54,7 @@ export const useClientGallery = () => {
       toast.add({
         title: 'Error',
         description: message,
-        color: 'red'
+        color: 'error'
       })
       throw error
     }

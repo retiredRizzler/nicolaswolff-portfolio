@@ -6,7 +6,7 @@ const updateGallerySchema = z.object({
   title: z.string().min(1).optional(),
   clientName: z.string().min(1).optional(),
   password: z.string().min(6).optional(),
-  expiresAt: z.string().datetime().optional().nullable(),
+  expiresAt: z.iso.datetime().optional().nullable(),
   maxViews: z.number().int().positive().optional().nullable()
 })
 

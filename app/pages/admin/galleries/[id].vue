@@ -337,7 +337,7 @@ const handleUpdateGallery = async () => {
       data.clientName = formState.clientName
     }
     if (formState.expiresAt) {
-      data.expiresAt = formState.expiresAt
+      data.expiresAt = new Date(formState.expiresAt).toISOString()
     }
     if (formState.maxViews) {
       data.maxViews = formState.maxViews

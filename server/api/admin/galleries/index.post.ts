@@ -5,7 +5,7 @@ const createGallerySchema = z.object({
   title: z.string().min(1, 'Title is required'),
   clientName: z.string().min(1, 'Client name is required'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
-  expiresAt: z.string().datetime().optional().nullable(),
+  expiresAt: z.iso.datetime().optional().nullable(),
   maxViews: z.number().int().positive().optional().nullable()
 })
 
